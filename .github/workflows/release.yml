@@ -1,0 +1,88 @@
+name: Build & Publish Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".gitignore"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine release version
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TOC_VER=$(grep -E '^##\s*Version:' ForeverGraphics.toc | head -n1 | sed -E 's/^##\s*Version:\s*//' | tr -d '\r' | xargs)
+          if [ -z "$TOC_VER" ]; then
+            TOC_VER="1.0.0"
+          fi
+
+          TAG="v${TOC_VER}"
+          if git rev-parse "$TAG" >/dev/null 2>&1 || gh release view "$TAG" >/dev/null 2>&1; then
+            # Auto-increment patch version when pushing updates without manually bumping TOC Version
+            LATEST=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n1)
+            if [ -z "$LATEST" ]; then
+              LATEST="$TAG"
+            fi
+            CLEAN="${LATEST#v}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CLEAN"
+            PATCH=$((PATCH + 1))
+            VER="${MAJOR}.${MINOR}.${PATCH}"
+            TAG="v${VER}"
+          else
+            VER="$TOC_VER"
+          fi
+
+          echo "version=${VER}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Resolved release version: ${TAG}"
+
+      - name: Package WoW Forever addon zip
+        id: package
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VER="${{ steps.version.outputs.version }}"
+          STAGE_DIR="$(mktemp -d)"
+          ADDON_DIR="${STAGE_DIR}/ForeverGraphics"
+          mkdir -p "${ADDON_DIR}"
+
+          cp ForeverGraphics.toc README.md "${ADDON_DIR}/"
+          cp -r Core Data UI "${ADDON_DIR}/"
+
+          # Stamp release version into packaged TOC so in-game version matches release tag
+          sed -i -E "s/^## Version:.*/## Version: ${VER}/" "${ADDON_DIR}/ForeverGraphics.toc"
+
+          ZIP_NAME="ForeverGraphics-${TAG}-forever.zip"
+          (cd "${STAGE_DIR}" && zip -r "${GITHUB_WORKSPACE}/${ZIP_NAME}" ForeverGraphics)
+
+          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
+          ls -lh "${GITHUB_WORKSPACE}/${ZIP_NAME}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          ZIP_NAME="${{ steps.package.outputs.zip_name }}"
+
+          gh release create "${TAG}" "${ZIP_NAME}" \
+            --target "${GITHUB_SHA}" \
+            --title "Forever Graphics ${TAG}" \
+            --generate-notes

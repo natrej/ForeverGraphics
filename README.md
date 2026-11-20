@@ -4,12 +4,17 @@
 
 ## Installation
 
-1. Copy the entire `ForeverGraphics` folder into your World of Warcraft: Forever AddOns directory:
-   - **Windows**: `C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\ForeverGraphics\`
-   - **macOS**: `/Applications/World of Warcraft/_forever_/Interface/AddOns/ForeverGraphics/`
-   - **Steam Deck / Linux**: `<WoW Install>/_forever_/Interface/AddOns/ForeverGraphics/`
-2. Confirm `ForeverGraphics.toc` sits directly inside `Interface/AddOns/ForeverGraphics/`.
+### Option 1 — Download Latest Release (Recommended)
+1. Download the latest `ForeverGraphics-vX.Y.Z-forever.zip` from [GitHub Releases](https://github.com/natrej/ForeverGraphics/releases/latest) (a new release zip is built and published automatically on every update).
+2. Extract it into your World of Warcraft: Forever AddOns directory so `ForeverGraphics.toc` is located at:
+   - **Windows**: `C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\ForeverGraphics\ForeverGraphics.toc`
+   - **macOS**: `/Applications/World of Warcraft/_forever_/Interface/AddOns/ForeverGraphics/ForeverGraphics.toc`
+   - **Steam Deck / Linux**: `<WoW Install>/_forever_/Interface/AddOns/ForeverGraphics/ForeverGraphics.toc`
 3. Launch World of Warcraft: Forever (or type `/reload` in chat) and enable **Forever Graphics** in the AddOns list.
+
+### Option 2 — WowUp
+1. In **WowUp**, select your **WoW: Forever** installation.
+2. Go to **Get Addons -> Install from URL** and paste `https://github.com/natrej/ForeverGraphics`.
 
 > **Tip:** Back up your `_forever_/WTF/Config.wtf` file before experimenting with extreme graphics CVars. Forever Graphics also automatically backs up every modified CVar's original pre-addon value so you can restore it with one click (`Backup` button or `/fg backup`).
 
