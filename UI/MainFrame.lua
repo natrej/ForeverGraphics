@@ -274,8 +274,8 @@ function MainFrame:Create()
 
     local verTxt = titleBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     verTxt:SetPoint("LEFT", titleTxt, "RIGHT", 8, -1)
-    verTxt:SetText("v" .. ns.ADDON_VERSION .. "  |cff4fc3f7WoW: Forever 1.60.1|r")
-    verTxt:SetTextColor(0.62, 0.68, 0.78)
+    verTxt:SetText("by " .. ns.ADDON_AUTHOR .. "  |  v" .. ns.ADDON_VERSION .. "  |cff4fc3f7WoW: Forever 1.60.1|r")
+    verTxt:SetTextColor(0.68, 0.74, 0.84)
 
     local closeBtn = ns.Widgets.CreateButton(titleBar, 26, 24, "X", function()
         f:Hide()

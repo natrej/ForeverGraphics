@@ -20,7 +20,7 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1, arg2)
         ns.FPSOverlay:Create()
         ns.MinimapBtn:Create()
         ns.MinimapBtn:RegisterOptionsPanel()
-        ns.Print("Loaded v" .. ns.ADDON_VERSION .. ". Type |cffffd54f/fg|r or click the minimap spyglass to open.")
+        ns.Print("Loaded v" .. ns.ADDON_VERSION .. " by " .. ns.ADDON_AUTHOR .. ". Type |cffffd54f/fg|r or click the minimap spyglass to open.")
 
     elseif event == "PLAYER_ENTERING_WORLD" then
         local db = ns.Engine:GetDB()

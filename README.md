@@ -1,6 +1,6 @@
-# Forever Graphics — World of Warcraft: Forever Addon
+# Forever Graphics — by jertan
 
-**Forever Graphics** is a zero-dependency addon built specifically for **World of Warcraft: Forever** (`1.60.1` / `Interface 16001`) that exposes and provides full interactive controls for **all hidden graphics CVars** — from Beyond Ultra draw distance, lush 256-density grass, shadow cascades, and native HDR10 calibration, to a **Live Client CVar Explorer** that dynamically discovers and controls *every* graphics/engine CVar in the running client via `C_Console.GetAllCommands()`.
+**Forever Graphics** (by **jertan**) is a zero-dependency addon built specifically for **World of Warcraft: Forever** (`1.60.1` / `Interface 16001`) that exposes and provides full interactive controls for **all hidden graphics CVars** — from Beyond Ultra draw distance, lush 256-density grass, shadow cascades, and native HDR10 calibration, to a **Live Client CVar Explorer** that dynamically discovers and controls *every* graphics/engine CVar in the running client via `C_Console.GetAllCommands()`.
 
 ## Installation
 
