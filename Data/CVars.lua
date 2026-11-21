@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.ADDON_TITLE = "Forever Graphics"
 ns.ADDON_AUTHOR = "jertan"
-ns.ADDON_VERSION = "1.0.1"
+ns.ADDON_VERSION = "1.1.0"
 
 -- Category definitions (ordered for tabs; tab 9 is the dynamic Live CVar Explorer)
 ns.CATEGORIES = {

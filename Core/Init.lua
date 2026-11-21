@@ -55,12 +55,15 @@ local function PrintHelp()
     ns.Print("  |cffffd54f/fg explorer|r — Open Live Client CVar Explorer (all engine CVars)")
     ns.Print("  |cffffd54f/fg hdr|r — Open HDR10 & Display Calibration tab")
     ns.Print("  |cffffd54f/fg preset <name>|r — Apply preset (performance, balanced, blizzard_max, beyond_ultra, classic_look, handheld)")
-    ns.Print("  |cffffd54f/fg undo|r — Undo last applied preset")
+    ns.Print("  |cffffd54f/fg save <1|2>|r — Save current graphics settings to Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fg load <1|2>|r — Load saved settings from Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fg clear <1|2>|r — Clear Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fg undo|r — Undo last applied preset or slot")
     ns.Print("  |cffffd54f/fg apply|r — Re-apply all saved CVar overrides now")
     ns.Print("  |cffffd54f/fg backup|r — Restore original pre-addon CVar values")
     ns.Print("  |cffffd54f/fg reset|r — Reset all managed CVars to Blizzard defaults")
     ns.Print("  |cffffd54f/fg fps|r — Toggle live FPS & frame-time overlay")
-    ns.Print("  |cffffd54f/fg minimap|r — Show/hide minimap button")
+    ns.Print("  |cffffd54f/fg minimap|r — Show/hide minimap icon")
     ns.Print("  |cffffd54f/fg restart|r — Restart graphics engine")
     ns.Print("  |cffffd54f/fg get <cvar>|r — Print current and default value of a CVar")
     ns.Print("  |cffffd54f/fg set <cvar> <val>|r — Safely set any CVar (with crash caps & combat queue)")
@@ -110,6 +113,27 @@ SlashCmdList["FOREVERGRAPHICS"] = function(msg)
         ns.Engine:TakeSnapshot()
     elseif cmd == "diff" then
         ns.Engine:DiffSnapshot()
+    elseif cmd == "save" then
+        local idx = tonumber(rest)
+        if idx ~= 1 and idx ~= 2 then
+            ns.Print("Usage: /fg save <1|2>")
+        else
+            ns.Engine:SaveCustomSlot(idx)
+        end
+    elseif cmd == "load" then
+        local idx = tonumber(rest)
+        if idx ~= 1 and idx ~= 2 then
+            ns.Print("Usage: /fg load <1|2>")
+        else
+            ns.Engine:LoadCustomSlot(idx)
+        end
+    elseif cmd == "clear" then
+        local idx = tonumber(rest)
+        if idx ~= 1 and idx ~= 2 then
+            ns.Print("Usage: /fg clear <1|2>")
+        else
+            ns.Engine:ClearCustomSlot(idx)
+        end
     elseif cmd == "preset" then
         if rest == "" then
             ns.Print("Usage: /fg preset <performance|balanced|blizzard_max|beyond_ultra|classic_look|handheld>")

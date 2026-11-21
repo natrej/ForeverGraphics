@@ -155,6 +155,7 @@ function Engine:GetDB()
     local db = ForeverGraphicsDB
     if type(db.overrides) ~= "table" then db.overrides = {} end
     if type(db.backup) ~= "table" then db.backup = {} end
+    if type(db.customSlots) ~= "table" then db.customSlots = {} end
     if type(db.settings) ~= "table" then
         db.settings = {
             reapplyOnLogin = true,
@@ -436,6 +437,131 @@ function Engine:UndoLastPreset()
     db.lastUndo = nil
     ChatPrint("Undid " .. label .. " (" .. count .. " CVar(s) restored).")
     self:NotifyListeners(nil, nil, "undo")
+    return true
+end
+
+-------------------------------------------------------------------------------
+-- CUSTOM PRESET SAVE SLOTS (Slots 1 & 2)
+-------------------------------------------------------------------------------
+Engine.MAX_CUSTOM_SLOTS = 2
+
+function Engine:GetCustomSlot(slotIndex)
+    slotIndex = tonumber(slotIndex)
+    if not slotIndex or slotIndex < 1 or slotIndex > self.MAX_CUSTOM_SLOTS then
+        return nil
+    end
+    local db = self:GetDB()
+    local slot = db.customSlots[slotIndex]
+    if type(slot) == "table" and type(slot.values) == "table" then
+        return slot
+    end
+    return nil
+end
+
+function Engine:SaveCustomSlot(slotIndex)
+    slotIndex = tonumber(slotIndex)
+    if not slotIndex or slotIndex < 1 or slotIndex > self.MAX_CUSTOM_SLOTS then
+        ChatPrint("|cffff5252Invalid slot:|r Choose slot 1 or 2.")
+        return false
+    end
+
+    local db = self:GetDB()
+    local values = {}
+    local count = 0
+
+    -- Save all supported curated graphics CVars
+    for _, def in ipairs(ns.CVARS) do
+        if self:Exists(def.cvar) and not self:IsReadOnly(def.cvar) then
+            local val = self:Get(def.cvar)
+            if val ~= nil then
+                values[def.cvar] = tostring(val)
+                count = count + 1
+            end
+        end
+    end
+
+    -- Also capture any custom overrides set via the Live CVar Explorer
+    for cvar in pairs(db.overrides) do
+        if values[cvar] == nil and self:Exists(cvar) and not self:IsReadOnly(cvar) then
+            local val = self:Get(cvar)
+            if val ~= nil then
+                values[cvar] = tostring(val)
+                count = count + 1
+            end
+        end
+    end
+
+    local timestamp = (date and date("%Y-%m-%d %H:%M")) or "Saved"
+    db.customSlots[slotIndex] = {
+        values = values,
+        count = count,
+        savedAt = timestamp,
+    }
+
+    ChatPrint(string.format(
+        "Saved current graphics settings to |cffffd54fSlot %d|r (%d CVars captured).",
+        slotIndex, count
+    ))
+    self:NotifyListeners(nil, nil, "slot_save")
+    return true
+end
+
+function Engine:LoadCustomSlot(slotIndex)
+    slotIndex = tonumber(slotIndex)
+    local slot = self:GetCustomSlot(slotIndex)
+    if not slot then
+        ChatPrint("|cffff9800Slot " .. tostring(slotIndex) .. " is empty.|r Save your current settings to it first.")
+        return false
+    end
+
+    local db = self:GetDB()
+    -- Capture undo snapshot before loading slot
+    local undo = {}
+    for cvar in pairs(slot.values) do
+        if self:Exists(cvar) then
+            undo[cvar] = self:Get(cvar)
+        end
+    end
+    db.lastUndo = {
+        presetLabel = "Slot " .. slotIndex,
+        values = undo,
+    }
+
+    local applied, skipped = 0, 0
+    for cvar, val in pairs(slot.values) do
+        if self:Exists(cvar) and not self:IsReadOnly(cvar) then
+            local cur = self:Get(cvar)
+            if not self:ValuesEqual(cur, val) then
+                self:Set(cvar, val, { silent = true, trackOverride = true })
+            else
+                db.overrides[cvar] = tostring(val)
+            end
+            applied = applied + 1
+        else
+            skipped = skipped + 1
+        end
+    end
+
+    ChatPrint(string.format(
+        "Loaded |cffffd54fCustom Slot %d|r (%d CVars applied%s). Use Undo to revert.",
+        slotIndex,
+        applied,
+        skipped > 0 and (", " .. skipped .. " skipped") or ""
+    ))
+    self:NotifyListeners(nil, nil, "slot_load")
+    return true
+end
+
+function Engine:ClearCustomSlot(slotIndex)
+    slotIndex = tonumber(slotIndex)
+    if not slotIndex or slotIndex < 1 or slotIndex > self.MAX_CUSTOM_SLOTS then
+        ChatPrint("|cffff5252Invalid slot:|r Choose slot 1 or 2.")
+        return false
+    end
+    local db = self:GetDB()
+    db.customSlots[slotIndex] = nil
+    ChatPrint("Cleared |cffffd54fCustom Slot " .. slotIndex .. "|r.")
+    self:NotifyListeners(nil, nil, "slot_clear")
     return true
 end
 

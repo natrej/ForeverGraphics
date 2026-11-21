@@ -15,6 +15,8 @@ local hdrBanner = nil
 local hdrFooterBtn = nil
 local statusLabel = nil
 local emptyLabel = nil
+local customSlotControls = {}
+local minimapCheckbox = nil
 
 local function BuildCuratedList()
     if not scrollContainer then return end
@@ -167,6 +169,37 @@ function MainFrame:UpdateHeaderAndFooterStatus()
             hdrFooterBtn:SetText("|cff90a4aeHDR10: OFF|r")
         end
     end
+
+    if minimapCheckbox then
+        minimapCheckbox:SetChecked(db.settings.showMinimapButton)
+    end
+
+    for slotIdx = 1, 2 do
+        local ctrl = customSlotControls[slotIdx]
+        if ctrl then
+            local slot = ns.Engine:GetCustomSlot(slotIdx)
+            if slot then
+                ctrl.loadBtn:SetText("|cff66bb6aLoad Slot " .. slotIdx .. "|r")
+                ctrl.loadBtn:SetEnabled(true)
+                ctrl.loadBtn:SetAlpha(1.0)
+                ctrl.loadBtn.tooltipTitle = "Load Custom Slot " .. slotIdx
+                ctrl.loadBtn.tooltipText = string.format(
+                    "Saved %s (%d CVars). Click to apply all saved settings from Slot %d (supports Undo).",
+                    tostring(slot.savedAt or "previously"), slot.count or 0, slotIdx
+                )
+                ctrl.clearBtn:SetEnabled(true)
+                ctrl.clearBtn:SetAlpha(1.0)
+            else
+                ctrl.loadBtn:SetText("|cff8892a4Slot " .. slotIdx .. " (Empty)|r")
+                ctrl.loadBtn:SetEnabled(false)
+                ctrl.loadBtn:SetAlpha(0.55)
+                ctrl.loadBtn.tooltipTitle = "Custom Slot " .. slotIdx .. " (Empty)"
+                ctrl.loadBtn.tooltipText = "Click 'Save " .. slotIdx .. "' to store your current graphics settings in this slot."
+                ctrl.clearBtn:SetEnabled(false)
+                ctrl.clearBtn:SetAlpha(0.35)
+            end
+        end
+    end
 end
 
 function MainFrame:SelectTab(tabId)
@@ -208,7 +241,7 @@ function MainFrame:Create()
     if frame then return frame end
 
     local f = CreateFrame("Frame", "ForeverGraphicsMainFrame", UIParent, "BackdropTemplate")
-    f:SetSize(880, 610)
+    f:SetSize(880, 640)
     f:SetPoint("CENTER")
     f:SetFrameStrata("DIALOG")
     f:SetClampedToScreen(true)
@@ -336,16 +369,17 @@ function MainFrame:Create()
     end)
 
     ---------------------------------------------------------------------------
-    -- PRESET BAR
+    -- PRESET & CUSTOM SAVE SLOTS BAR (2 rows)
     ---------------------------------------------------------------------------
     local presetBar = CreateFrame("Frame", nil, f, "BackdropTemplate")
-    presetBar:SetHeight(36)
+    presetBar:SetHeight(64)
     presetBar:SetPoint("TOPLEFT", titleBar, "BOTTOMLEFT", 8, -6)
     presetBar:SetPoint("TOPRIGHT", titleBar, "BOTTOMRIGHT", -8, -6)
     ns.Widgets.ApplyBackdrop(presetBar, { 0.09, 0.11, 0.15, 0.92 }, ns.Widgets.COLORS.border)
 
+    -- Row 1: Built-in Presets + Undo / Backup / Reset All
     local pLabel = presetBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    pLabel:SetPoint("LEFT", 10, 0)
+    pLabel:SetPoint("TOPLEFT", 10, -11)
     pLabel:SetText("Presets:")
     pLabel:SetTextColor(1.0, 0.82, 0.28)
 
@@ -364,7 +398,7 @@ function MainFrame:Create()
     local resetAllBtn = ns.Widgets.CreateButton(presetBar, 68, 22, "Reset All", function()
         ns.Engine:ResetAllToBlizzardDefault()
     end)
-    resetAllBtn:SetPoint("RIGHT", -8, 0)
+    resetAllBtn:SetPoint("TOPRIGHT", -8, -6)
     resetAllBtn.tooltipTitle = "Reset All to Blizzard Defaults"
     resetAllBtn.tooltipText = "Restores every graphics CVar managed by Forever Graphics back to Blizzard's client default."
 
@@ -379,8 +413,58 @@ function MainFrame:Create()
         ns.Engine:UndoLastPreset()
     end)
     undoBtn:SetPoint("RIGHT", restoreBtn, "LEFT", -4, 0)
-    undoBtn.tooltipTitle = "Undo Last Preset"
-    undoBtn.tooltipText = "Reverts the settings changed by the most recently applied preset."
+    undoBtn.tooltipTitle = "Undo Last Preset / Slot"
+    undoBtn.tooltipText = "Reverts the settings changed by the most recently applied preset or custom save slot."
+
+    -- Subtle divider between Row 1 and Row 2
+    local rowDivider = presetBar:CreateTexture(nil, "ARTWORK")
+    rowDivider:SetHeight(1)
+    rowDivider:SetPoint("TOPLEFT", 8, -33)
+    rowDivider:SetPoint("TOPRIGHT", -8, -33)
+    rowDivider:SetTexture("Interface\\Buttons\\WHITE8X8")
+    rowDivider:SetVertexColor(0.26, 0.30, 0.38, 0.45)
+
+    -- Row 2: 2 Custom Preset Save Slots + Show Minimap Icon Toggle
+    local slotLabel = presetBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    slotLabel:SetPoint("TOPLEFT", 10, -43)
+    slotLabel:SetText("Save Slots:")
+    slotLabel:SetTextColor(0.45, 0.82, 1.0)
+
+    local slotAnchor = slotLabel
+    for slotIdx = 1, 2 do
+        local gap = (slotIdx == 1) and 8 or 18
+        local loadBtn = ns.Widgets.CreateButton(presetBar, 118, 22, "Slot " .. slotIdx .. " (Empty)", function()
+            ns.Engine:LoadCustomSlot(slotIdx)
+        end)
+        loadBtn:SetPoint("LEFT", slotAnchor, "RIGHT", gap, 0)
+
+        local saveBtn = ns.Widgets.CreateButton(presetBar, 54, 22, "Save " .. slotIdx, function()
+            ns.Engine:SaveCustomSlot(slotIdx)
+        end)
+        saveBtn:SetPoint("LEFT", loadBtn, "RIGHT", 4, 0)
+        saveBtn.tooltipTitle = "Save to Custom Slot " .. slotIdx
+        saveBtn.tooltipText = "Saves all current curated graphics settings and custom CVar overrides into Slot " .. slotIdx .. "."
+
+        local clearBtn = ns.Widgets.CreateButton(presetBar, 22, 22, "x", function()
+            ns.Engine:ClearCustomSlot(slotIdx)
+        end)
+        clearBtn:SetPoint("LEFT", saveBtn, "RIGHT", 3, 0)
+        clearBtn.tooltipTitle = "Clear Custom Slot " .. slotIdx
+        clearBtn.tooltipText = "Removes the saved preset stored in Slot " .. slotIdx .. "."
+
+        customSlotControls[slotIdx] = {
+            loadBtn = loadBtn,
+            saveBtn = saveBtn,
+            clearBtn = clearBtn,
+        }
+        slotAnchor = clearBtn
+    end
+
+    minimapCheckbox = ns.Widgets.CreateCheckBox(presetBar, "Show Minimap Icon", function(_, checked)
+        ns.MinimapBtn:SetShown(checked)
+    end)
+    minimapCheckbox:SetPoint("TOPRIGHT", -124, -40)
+    minimapCheckbox:SetChecked(db.settings.showMinimapButton)
 
     ---------------------------------------------------------------------------
     -- FOOTER BAR

@@ -25,11 +25,22 @@ local function OpenQuickMenu(anchor)
         { value = "beyond_ultra",label = "Preset: Beyond Ultra" },
         { value = "classic_look",label = "Preset: Classic Look" },
         { value = "handheld",    label = "Preset: Handheld / Deck" },
-        { value = "hdr",         label = "Open HDR10 Calibration" },
-        { value = "explorer",    label = "Open Live CVar Explorer" },
-        { value = "undo",        label = "Undo Last Preset" },
-        { value = "restart",     label = "Restart Graphics Engine" },
     }
+    for slotIdx = 1, 2 do
+        local slot = ns.Engine:GetCustomSlot(slotIdx)
+        if slot then
+            table.insert(options, {
+                value = "slot_" .. slotIdx,
+                label = string.format("Load Slot %d (%d CVars)", slotIdx, slot.count or 0),
+            })
+        end
+    end
+    table.insert(options, { value = "hdr",         label = "Open HDR10 Calibration" })
+    table.insert(options, { value = "explorer",    label = "Open Live CVar Explorer" })
+    table.insert(options, { value = "undo",        label = "Undo Last Preset" })
+    table.insert(options, { value = "restart",     label = "Restart Graphics Engine" })
+    table.insert(options, { value = "hide_minimap",label = "|cffff8a65Hide Minimap Icon|r" })
+
     ns.Widgets.ShowDropdownMenu(anchor, options, nil, function(choice)
         if choice == "open" then
             ns.MainFrame:Toggle()
@@ -43,6 +54,13 @@ local function OpenQuickMenu(anchor)
             ns.Engine:UndoLastPreset()
         elseif choice == "restart" then
             ns.Engine:RestartGraphics()
+        elseif choice == "hide_minimap" then
+            MinimapBtn:SetShown(false)
+            ns.Print("Minimap icon hidden. Re-enable anytime in |cffffd54f/fg|r or Options -> AddOns -> Forever Graphics.")
+        elseif choice == "slot_1" then
+            ns.Engine:LoadCustomSlot(1)
+        elseif choice == "slot_2" then
+            ns.Engine:LoadCustomSlot(2)
         else
             ns.Engine:ApplyPreset(choice)
         end
@@ -132,6 +150,10 @@ function MinimapBtn:SetShown(shown)
             button:Hide()
         end
     end
+    if self.optionsMinimapCB then
+        self.optionsMinimapCB:SetChecked(db.settings.showMinimapButton)
+    end
+    ns.Engine:NotifyListeners(nil, nil, "minimap")
 end
 
 function MinimapBtn:Toggle()
@@ -171,9 +193,16 @@ function MinimapBtn:RegisterOptionsPanel()
     end)
     explorerBtn:SetPoint("LEFT", openBtn, "RIGHT", 12, 0)
 
+    local minimapCB = ns.Widgets.CreateCheckBox(panel, "Show Minimap Icon", function(_, checked)
+        MinimapBtn:SetShown(checked)
+    end)
+    minimapCB:SetPoint("TOPLEFT", openBtn, "BOTTOMLEFT", 0, -18)
+    minimapCB:SetChecked(ns.Engine:GetDB().settings.showMinimapButton)
+    self.optionsMinimapCB = minimapCB
+
     local hint = panel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    hint:SetPoint("TOPLEFT", openBtn, "BOTTOMLEFT", 0, -16)
-    hint:SetText("Slash commands:  |cff4fc3f7/fg|r  |  |cff4fc3f7/fg preset <name>|r  |  |cff4fc3f7/fg fps|r  |  |cff4fc3f7/fg scan <word>|r  |  |cff4fc3f7/fg help|r")
+    hint:SetPoint("TOPLEFT", minimapCB, "BOTTOMLEFT", 0, -16)
+    hint:SetText("Slash commands:  |cff4fc3f7/fg|r  |  |cff4fc3f7/fg save 1|r  |  |cff4fc3f7/fg load 1|r  |  |cff4fc3f7/fg minimap|r  |  |cff4fc3f7/fg help|r")
     hint:SetTextColor(0.75, 0.80, 0.88)
 
     if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
