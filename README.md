@@ -37,3 +37,9 @@ A zero-dependency **World of Warcraft: Forever** (`1.60.1`) addon that exposes a
 | `/fo scan [keyword]` | Search live client graphics CVars in chat |
 | `/fo snap` / `/fo diff` | Take a CVar snapshot and diff changes |
 | `/fo help` | Show all commands in chat |
+
+## License
+
+Copyright (C) 2026 jertan
+
+This project is licensed under the **GNU General Public License v3.0** — see the [LICENSE](LICENSE) file for details.

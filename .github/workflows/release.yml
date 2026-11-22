@@ -63,7 +63,7 @@ jobs:
           ADDON_DIR="${STAGE_DIR}/ForeverOptics"
           mkdir -p "${ADDON_DIR}"
 
-          cp ForeverOptics.toc README.md "${ADDON_DIR}/"
+          cp ForeverOptics.toc README.md LICENSE "${ADDON_DIR}/"
           cp -r Core Data UI "${ADDON_DIR}/"
 
           # Stamp release version into packaged TOC so in-game version matches release tag
