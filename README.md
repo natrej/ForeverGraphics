@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="Forever Graphics Logo" width="140" />
+</p>
+
 # Forever Graphics — by jertan
 
 A zero-dependency **World of Warcraft: Forever** (`1.60.1`) addon that exposes and provides full controls for all hidden graphics settings.

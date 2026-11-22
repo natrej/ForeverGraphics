@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Forever Graphics Logo">
+  <defs>
+    <!-- Deep Azeroth slate sky -->
+    <radialGradient id="bgGrad" cx="50%" cy="34%" r="66%">
+      <stop offset="0%" stop-color="#222f45"/>
+      <stop offset="58%" stop-color="#111824"/>
+      <stop offset="100%" stop-color="#080b11"/>
+    </radialGradient>
+
+    <!-- Warm Blizzard gold metallic gradient -->
+    <linearGradient id="goldGrad" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#ffea9c"/>
+      <stop offset="45%" stop-color="#eab338"/>
+      <stop offset="100%" stop-color="#9e6610"/>
+    </linearGradient>
+
+    <!-- Inner gold rim -->
+    <linearGradient id="goldSoft" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe074"/>
+      <stop offset="100%" stop-color="#b87e18"/>
+    </linearGradient>
+
+    <!-- Radiant sky / god-rays glow -->
+    <radialGradient id="sunGlow" cx="50%" cy="32%" r="44%">
+      <stop offset="0%" stop-color="#ffe58f" stop-opacity="0.50"/>
+      <stop offset="50%" stop-color="#eab338" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#eab338" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Sun disc gradient -->
+    <radialGradient id="sunDisc" cx="42%" cy="38%" r="60%">
+      <stop offset="0%" stop-color="#fff6d1"/>
+      <stop offset="55%" stop-color="#f7c948"/>
+      <stop offset="100%" stop-color="#c98818"/>
+    </radialGradient>
+
+    <!-- Mountain face gradients (sun-facing vs shadow) -->
+    <linearGradient id="mtnLit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3c506b"/>
+      <stop offset="100%" stop-color="#1b2638"/>
+    </linearGradient>
+    <linearGradient id="mtnDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#172030"/>
+      <stop offset="100%" stop-color="#0b1019"/>
+    </linearGradient>
+
+    <!-- Horizon tapered cyan line -->
+    <linearGradient id="horizonLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#29b6f6" stop-opacity="0"/>
+      <stop offset="18%" stop-color="#4fc3f7" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#a8f0ff" stop-opacity="1"/>
+      <stop offset="82%" stop-color="#4fc3f7" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#29b6f6" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Luminous cyan infinity gradient -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#26a9f0"/>
+      <stop offset="50%" stop-color="#9beeff"/>
+      <stop offset="100%" stop-color="#26a9f0"/>
+    </linearGradient>
+
+    <!-- Subtle top optical lens sheen -->
+    <linearGradient id="lensSheen" x1="15%" y1="0%" x2="70%" y2="62%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Clip inside inner lens circle -->
+    <clipPath id="lensClip">
+      <circle cx="256" cy="256" r="196"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer medallion dark base -->
+  <circle cx="256" cy="256" r="240" fill="#080b11"/>
+
+  <!-- Outer beveled gold ring -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#goldGrad)" stroke-width="18"/>
+
+  <!-- Recessed dark channel -->
+  <circle cx="256" cy="256" r="208" fill="none" stroke="#0a0e16" stroke-width="12"/>
+
+  <!-- Inner thin gold optical ring -->
+  <circle cx="256" cy="256" r="198" fill="none" stroke="url(#goldSoft)" stroke-width="3.5" opacity="0.9"/>
+
+  <!-- Forged cardinal compass diamonds seated on outer gold ring -->
+  <g fill="url(#goldGrad)" stroke="#080b11" stroke-width="3" stroke-linejoin="round">
+    <polygon points="256,8 270,29 256,48 242,29"/>
+    <polygon points="256,504 270,483 256,464 242,483"/>
+    <polygon points="8,256 29,242 48,256 29,270"/>
+    <polygon points="504,256 483,242 464,256 483,270"/>
+  </g>
+
+  <!-- Clipped interior lens scene -->
+  <g clip-path="url(#lensClip)">
+    <!-- Sky base -->
+    <circle cx="256" cy="256" r="196" fill="url(#bgGrad)"/>
+
+    <!-- Golden atmospheric bloom -->
+    <circle cx="256" cy="256" r="196" fill="url(#sunGlow)"/>
+
+    <!-- Crisp symmetric volumetric sun shafts -->
+    <g fill="#ffe082" opacity="0.17">
+      <polygon points="256,158 198,38 234,38"/>
+      <polygon points="256,158 278,38 314,38"/>
+      <polygon points="256,158 106,78 144,52"/>
+      <polygon points="256,158 368,52 406,78"/>
+    </g>
+
+    <!-- Radiant sun centered in mountain pass -->
+    <circle cx="256" cy="158" r="38" fill="url(#sunDisc)"/>
+
+    <!-- Right mountain peak (lit left slope facing sun, shadowed right slope) -->
+    <polygon points="244,312 344,178 448,312" fill="url(#mtnLit)"/>
+    <polygon points="344,178 378,312 448,312" fill="url(#mtnDark)"/>
+    <!-- Sun-facing inner ridge highlight -->
+    <polyline points="282,262 344,178 358,204" fill="none" stroke="#ffe082" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
+
+    <!-- Left hero mountain peak (shadowed outer left, sunlit right slope facing sun) -->
+    <polygon points="64,312 184,150 318,312" fill="url(#mtnDark)"/>
+    <polygon points="184,150 232,312 318,312" fill="url(#mtnLit)"/>
+    <!-- Sun-facing inner ridge highlight -->
+    <polyline points="164,177 184,150 264,248" fill="none" stroke="#ffe082" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <!-- Deep water reflection plane -->
+    <rect x="50" y="312" width="412" height="150" fill="#09101b"/>
+
+    <!-- Crisp tapered glowing horizon line -->
+    <rect x="64" y="310" width="384" height="4" rx="2" fill="url(#horizonLine)"/>
+
+    <!-- Soft cyan glow behind infinity mark -->
+    <path
+      d="M 256,378
+         C 226,340 168,340 168,378
+         C 168,416 226,416 256,378
+         C 286,340 344,340 344,378
+         C 344,416 286,416 256,378 Z"
+      fill="none"
+      stroke="#4fc3f7"
+      stroke-width="24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.16"
+    />
+
+    <!-- Crisp geometric Infinity / Forever symbol -->
+    <path
+      d="M 256,378
+         C 226,340 168,340 168,378
+         C 168,416 226,416 256,378
+         C 286,340 344,340 344,378
+         C 344,416 286,416 256,378 Z"
+      fill="none"
+      stroke="url(#cyanGrad)"
+      stroke-width="14"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Subtle optical lens glass sheen -->
+    <path d="M 60,180 A 196,196 0 0,1 380,96 Q 220,170 60,240 Z" fill="url(#lensSheen)"/>
+  </g>
+</svg>
