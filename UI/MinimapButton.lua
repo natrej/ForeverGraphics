@@ -17,7 +17,7 @@ end
 
 local function OpenQuickMenu(anchor)
     local options = {
-        { value = "open",        label = "Open Forever Graphics Panel" },
+        { value = "open",        label = "Open ForeverOptics Panel" },
         { value = "fps",         label = "Toggle FPS Overlay" },
         { value = "performance", label = "Preset: Performance" },
         { value = "balanced",    label = "Preset: Balanced" },
@@ -56,7 +56,7 @@ local function OpenQuickMenu(anchor)
             ns.Engine:RestartGraphics()
         elseif choice == "hide_minimap" then
             MinimapBtn:SetShown(false)
-            ns.Print("Minimap icon hidden. Re-enable anytime in |cffffd54f/fg|r or Options -> AddOns -> Forever Graphics.")
+            ns.Print("Minimap icon hidden. Re-enable anytime in |cffffd54f/fo|r or Options -> AddOns -> ForeverOptics.")
         elseif choice == "slot_1" then
             ns.Engine:LoadCustomSlot(1)
         elseif choice == "slot_2" then
@@ -70,7 +70,7 @@ end
 function MinimapBtn:Create()
     if button or not Minimap then return button end
 
-    local btn = CreateFrame("Button", "ForeverGraphicsMinimapButton", Minimap)
+    local btn = CreateFrame("Button", "ForeverOpticsMinimapButton", Minimap)
     btn:SetSize(31, 31)
     btn:SetFrameStrata("MEDIUM")
     btn:SetFrameLevel(8)
@@ -122,7 +122,7 @@ function MinimapBtn:Create()
         if not GameTooltip then return end
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
         GameTooltip:ClearLines()
-        GameTooltip:AddLine("Forever Graphics by " .. ns.ADDON_AUTHOR, 1, 0.82, 0.28)
+        GameTooltip:AddLine("ForeverOptics by " .. ns.ADDON_AUTHOR, 1, 0.82, 0.28)
         GameTooltip:AddLine("Left-Click: Open Graphics Control Panel", 0.9, 0.92, 0.95)
         GameTooltip:AddLine("Right-Click: Quick Presets & Tools", 0.9, 0.92, 0.95)
         GameTooltip:AddLine("Drag: Move around Minimap", 0.65, 0.70, 0.78)
@@ -161,14 +161,14 @@ function MinimapBtn:Toggle()
     self:SetShown(not db.settings.showMinimapButton)
 end
 
--- Register inside Blizzard Options -> AddOns -> Forever Graphics
+-- Register inside Blizzard Options -> AddOns -> ForeverOptics
 function MinimapBtn:RegisterOptionsPanel()
-    local panel = CreateFrame("Frame", "ForeverGraphicsOptionsLauncher")
-    panel.name = "Forever Graphics"
+    local panel = CreateFrame("Frame", "ForeverOpticsOptionsLauncher")
+    panel.name = "ForeverOptics"
 
     local title = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
     title:SetPoint("TOPLEFT", 16, -16)
-    title:SetText("Forever Graphics by " .. ns.ADDON_AUTHOR .. "  v" .. ns.ADDON_VERSION)
+    title:SetText("ForeverOptics by " .. ns.ADDON_AUTHOR .. "  v" .. ns.ADDON_VERSION)
     title:SetTextColor(1.0, 0.82, 0.28)
 
     local desc = panel:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -177,7 +177,7 @@ function MinimapBtn:RegisterOptionsPanel()
     desc:SetJustifyH("LEFT")
     desc:SetText("Exposes and controls all hidden graphics CVars in World of Warcraft: Forever, including Beyond Ultra view distances, dense grass, shadow cascades, HDR10 calibration, FPS monitoring, and a live client CVar explorer.")
 
-    local openBtn = ns.Widgets.CreateButton(panel, 220, 30, "Open Forever Graphics Panel", function()
+    local openBtn = ns.Widgets.CreateButton(panel, 220, 30, "Open ForeverOptics Panel", function()
         if HideUIPanel and SettingsPanel and SettingsPanel:IsShown() then
             HideUIPanel(SettingsPanel)
         end
@@ -202,11 +202,11 @@ function MinimapBtn:RegisterOptionsPanel()
 
     local hint = panel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     hint:SetPoint("TOPLEFT", minimapCB, "BOTTOMLEFT", 0, -16)
-    hint:SetText("Slash commands:  |cff4fc3f7/fg|r  |  |cff4fc3f7/fg save 1|r  |  |cff4fc3f7/fg load 1|r  |  |cff4fc3f7/fg minimap|r  |  |cff4fc3f7/fg help|r")
+    hint:SetText("Slash commands:  |cff4fc3f7/fo|r  |  |cff4fc3f7/fo save 1|r  |  |cff4fc3f7/fo load 1|r  |  |cff4fc3f7/fo minimap|r  |  |cff4fc3f7/fo help|r")
     hint:SetTextColor(0.75, 0.80, 0.88)
 
     if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
-        local category = Settings.RegisterCanvasLayoutCategory(panel, "Forever Graphics")
+        local category = Settings.RegisterCanvasLayoutCategory(panel, "ForeverOptics")
         Settings.RegisterAddOnCategory(category)
         ns.settingsCategory = category
     elseif InterfaceOptions_AddCategory then
@@ -217,7 +217,7 @@ end
 -------------------------------------------------------------------------------
 -- BLIZZARD ADDON COMPARTMENT GLOBAL CALLBACKS (referenced in .toc)
 -------------------------------------------------------------------------------
-function ForeverGraphics_OnAddonCompartmentClick(_, mouseButton)
+function ForeverOptics_OnAddonCompartmentClick(_, mouseButton)
     if mouseButton == "RightButton" then
         ns.FPSOverlay:Toggle()
     else
@@ -225,16 +225,16 @@ function ForeverGraphics_OnAddonCompartmentClick(_, mouseButton)
     end
 end
 
-function ForeverGraphics_OnAddonCompartmentEnter(_, menuButtonFrame)
+function ForeverOptics_OnAddonCompartmentEnter(_, menuButtonFrame)
     if not GameTooltip then return end
     GameTooltip:SetOwner(menuButtonFrame, "ANCHOR_LEFT")
     GameTooltip:ClearLines()
-    GameTooltip:AddLine("Forever Graphics by " .. ns.ADDON_AUTHOR, 1, 0.82, 0.28)
+    GameTooltip:AddLine("ForeverOptics by " .. ns.ADDON_AUTHOR, 1, 0.82, 0.28)
     GameTooltip:AddLine("Left-Click: Open Hidden Graphics Panel", 0.9, 0.92, 0.95)
     GameTooltip:AddLine("Right-Click: Toggle FPS Overlay", 0.9, 0.92, 0.95)
     GameTooltip:Show()
 end
 
-function ForeverGraphics_OnAddonCompartmentLeave()
+function ForeverOptics_OnAddonCompartmentLeave()
     ns.Widgets.HideTooltip()
 end

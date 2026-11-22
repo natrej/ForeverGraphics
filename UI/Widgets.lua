@@ -299,7 +299,7 @@ local dropdownMenu = nil
 
 local function GetDropdownMenu()
     if dropdownMenu then return dropdownMenu end
-    local menu = CreateFrame("Frame", "ForeverGraphicsDropdownMenu", UIParent, "BackdropTemplate")
+    local menu = CreateFrame("Frame", "ForeverOpticsDropdownMenu", UIParent, "BackdropTemplate")
     menu:SetFrameStrata("TOOLTIP")
     menu:SetClampedToScreen(true)
     Widgets.ApplyBackdrop(menu, { 0.08, 0.10, 0.13, 0.98 }, Widgets.COLORS.borderGold)

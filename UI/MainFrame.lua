@@ -240,7 +240,7 @@ end
 function MainFrame:Create()
     if frame then return frame end
 
-    local f = CreateFrame("Frame", "ForeverGraphicsMainFrame", UIParent, "BackdropTemplate")
+    local f = CreateFrame("Frame", "ForeverOpticsMainFrame", UIParent, "BackdropTemplate")
     f:SetSize(880, 640)
     f:SetPoint("CENTER")
     f:SetFrameStrata("DIALOG")
@@ -268,13 +268,13 @@ function MainFrame:Create()
     if UISpecialFrames then
         local exists = false
         for _, name in ipairs(UISpecialFrames) do
-            if name == "ForeverGraphicsMainFrame" then
+            if name == "ForeverOpticsMainFrame" then
                 exists = true
                 break
             end
         end
         if not exists then
-            table.insert(UISpecialFrames, "ForeverGraphicsMainFrame")
+            table.insert(UISpecialFrames, "ForeverOpticsMainFrame")
         end
     end
 
@@ -302,7 +302,7 @@ function MainFrame:Create()
 
     local titleTxt = titleBar:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
     titleTxt:SetPoint("LEFT", icon, "RIGHT", 8, 0)
-    titleTxt:SetText("Forever Graphics")
+    titleTxt:SetText("ForeverOptics")
     titleTxt:SetTextColor(1.0, 0.82, 0.28)
 
     local verTxt = titleBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -400,14 +400,14 @@ function MainFrame:Create()
     end)
     resetAllBtn:SetPoint("TOPRIGHT", -8, -6)
     resetAllBtn.tooltipTitle = "Reset All to Blizzard Defaults"
-    resetAllBtn.tooltipText = "Restores every graphics CVar managed by Forever Graphics back to Blizzard's client default."
+    resetAllBtn.tooltipText = "Restores every graphics CVar managed by ForeverOptics back to Blizzard's client default."
 
     local restoreBtn = ns.Widgets.CreateButton(presetBar, 74, 22, "Backup", function()
         ns.Engine:RestoreBackup()
     end)
     restoreBtn:SetPoint("RIGHT", resetAllBtn, "LEFT", -4, 0)
     restoreBtn.tooltipTitle = "Restore Pre-Addon Backup"
-    restoreBtn.tooltipText = "Restores the exact CVar values your client had before you changed them with Forever Graphics."
+    restoreBtn.tooltipText = "Restores the exact CVar values your client had before you changed them with ForeverOptics."
 
     local undoBtn = ns.Widgets.CreateButton(presetBar, 54, 22, "Undo", function()
         ns.Engine:UndoLastPreset()
@@ -506,7 +506,7 @@ function MainFrame:Create()
     end)
     reapplyNowBtn:SetPoint("RIGHT", restartBtn, "LEFT", -5, 0)
     reapplyNowBtn.tooltipTitle = "Reapply All Saved Overrides"
-    reapplyNowBtn.tooltipText = "Immediately re-writes all CVars you customized in Forever Graphics."
+    reapplyNowBtn.tooltipText = "Immediately re-writes all CVars you customized in ForeverOptics."
 
     hdrFooterBtn = ns.Widgets.CreateButton(footer, 86, 22, "HDR10: OFF", function()
         MainFrame:SelectTab("hdr")

@@ -29,7 +29,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TOC_VER=$(grep -E '^##\s*Version:' ForeverGraphics.toc | head -n1 | sed -E 's/^##\s*Version:\s*//' | tr -d '\r' | xargs)
+          TOC_VER=$(grep -E '^##\s*Version:' ForeverOptics.toc | head -n1 | sed -E 's/^##\s*Version:\s*//' | tr -d '\r' | xargs)
           if [ -z "$TOC_VER" ]; then
             TOC_VER="1.0.0"
           fi
@@ -60,17 +60,17 @@ jobs:
           TAG="${{ steps.version.outputs.tag }}"
           VER="${{ steps.version.outputs.version }}"
           STAGE_DIR="$(mktemp -d)"
-          ADDON_DIR="${STAGE_DIR}/ForeverGraphics"
+          ADDON_DIR="${STAGE_DIR}/ForeverOptics"
           mkdir -p "${ADDON_DIR}"
 
-          cp ForeverGraphics.toc README.md "${ADDON_DIR}/"
+          cp ForeverOptics.toc README.md "${ADDON_DIR}/"
           cp -r Core Data UI "${ADDON_DIR}/"
 
           # Stamp release version into packaged TOC so in-game version matches release tag
-          sed -i -E "s/^## Version:.*/## Version: ${VER}/" "${ADDON_DIR}/ForeverGraphics.toc"
+          sed -i -E "s/^## Version:.*/## Version: ${VER}/" "${ADDON_DIR}/ForeverOptics.toc"
 
-          ZIP_NAME="ForeverGraphics-${TAG}-forever.zip"
-          (cd "${STAGE_DIR}" && zip -r "${GITHUB_WORKSPACE}/${ZIP_NAME}" ForeverGraphics)
+          ZIP_NAME="ForeverOptics-${TAG}-forever.zip"
+          (cd "${STAGE_DIR}" && zip -r "${GITHUB_WORKSPACE}/${ZIP_NAME}" ForeverOptics)
 
           echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
           ls -lh "${GITHUB_WORKSPACE}/${ZIP_NAME}"
@@ -84,5 +84,5 @@ jobs:
 
           gh release create "${TAG}" "${ZIP_NAME}" \
             --target "${GITHUB_SHA}" \
-            --title "Forever Graphics ${TAG}" \
+            --title "ForeverOptics ${TAG}" \
             --generate-notes

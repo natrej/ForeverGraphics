@@ -24,7 +24,7 @@ local GRAPHICS_KEYWORDS = {
 
 local function ChatPrint(msg)
     if DEFAULT_CHAT_FRAME and DEFAULT_CHAT_FRAME.AddMessage then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff4fc3f7[Forever Graphics]|r " .. tostring(msg))
+        DEFAULT_CHAT_FRAME:AddMessage("|cff4fc3f7[ForeverOptics]|r " .. tostring(msg))
     end
 end
 ns.Print = ChatPrint
@@ -149,10 +149,10 @@ function Engine:IsOverriddenByAddon(cvar)
 end
 
 function Engine:GetDB()
-    if type(ForeverGraphicsDB) ~= "table" then
-        ForeverGraphicsDB = {}
+    if type(ForeverOpticsDB) ~= "table" then
+        ForeverOpticsDB = {}
     end
-    local db = ForeverGraphicsDB
+    local db = ForeverOpticsDB
     if type(db.overrides) ~= "table" then db.overrides = {} end
     if type(db.backup) ~= "table" then db.backup = {} end
     if type(db.customSlots) ~= "table" then db.customSlots = {} end
@@ -732,13 +732,13 @@ function Engine:TakeSnapshot()
         end
     end
     self.snapshot = snap
-    ChatPrint("Captured snapshot of " .. count .. " client CVars. Change a setting and click Diff Snapshot (or /fg diff).")
+    ChatPrint("Captured snapshot of " .. count .. " client CVars. Change a setting and click Diff Snapshot (or /fo diff).")
     return count
 end
 
 function Engine:DiffSnapshot()
     if not self.snapshot then
-        ChatPrint("No snapshot taken yet. Click Snapshot first (or run /fg snap).")
+        ChatPrint("No snapshot taken yet. Click Snapshot first (or run /fo snap).")
         return {}
     end
     local diffs = {}

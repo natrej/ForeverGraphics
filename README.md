@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="Forever Graphics Logo" width="140" />
+  <img src="assets/logo.svg" alt="ForeverOptics Logo" width="140" />
 </p>
 
-# Forever Graphics — by jertan
+# ForeverOptics — by jertan
 
 A zero-dependency **World of Warcraft: Forever** (`1.60.1`) addon that exposes and provides full controls for all hidden graphics settings.
 
@@ -18,22 +18,22 @@ A zero-dependency **World of Warcraft: Forever** (`1.60.1`) addon that exposes a
 
 | Command | Description |
 | --- | --- |
-| `/fg` or `/forevergraphics` | Toggle the main Forever Graphics window |
-| `/fg explorer` | Open directly to the Live Client CVar Explorer |
-| `/fg hdr` | Open directly to the HDR10 & Display Calibration tab |
-| `/fg preset <name>` | Apply a preset (`performance`, `balanced`, `blizzard_max`, `beyond_ultra`, `classic_look`, `handheld`) |
-| `/fg save <1\|2>` | Save current graphics settings to Custom Slot 1 or 2 |
-| `/fg load <1\|2>` | Load saved settings from Custom Slot 1 or 2 |
-| `/fg clear <1\|2>` | Clear Custom Slot 1 or 2 |
-| `/fg undo` | Undo the last applied preset or slot |
-| `/fg apply` | Re-apply all saved CVar overrides immediately |
-| `/fg backup` | Restore pre-addon backed-up CVar values |
-| `/fg reset` | Reset all managed CVars to Blizzard defaults |
-| `/fg fps` | Toggle the movable live FPS & delta overlay |
-| `/fg minimap` | Show or hide the minimap icon |
-| `/fg restart` | Restart the graphics engine |
-| `/fg get <cvar>` | Print a CVar's current value and client default |
-| `/fg set <cvar> <value>` | Safely set any CVar (with crash caps & combat queue) |
-| `/fg scan [keyword]` | Search live client graphics CVars in chat |
-| `/fg snap` / `/fg diff` | Take a CVar snapshot and diff changes |
-| `/fg help` | Show all commands in chat |
+| `/fo` or `/foreveroptics` | Toggle the main ForeverOptics window |
+| `/fo explorer` | Open directly to the Live Client CVar Explorer |
+| `/fo hdr` | Open directly to the HDR10 & Display Calibration tab |
+| `/fo preset <name>` | Apply a preset (`performance`, `balanced`, `blizzard_max`, `beyond_ultra`, `classic_look`, `handheld`) |
+| `/fo save <1\|2>` | Save current graphics settings to Custom Slot 1 or 2 |
+| `/fo load <1\|2>` | Load saved settings from Custom Slot 1 or 2 |
+| `/fo clear <1\|2>` | Clear Custom Slot 1 or 2 |
+| `/fo undo` | Undo the last applied preset or slot |
+| `/fo apply` | Re-apply all saved CVar overrides immediately |
+| `/fo backup` | Restore pre-addon backed-up CVar values |
+| `/fo reset` | Reset all managed CVars to Blizzard defaults |
+| `/fo fps` | Toggle the movable live FPS & delta overlay |
+| `/fo minimap` | Show or hide the minimap icon |
+| `/fo restart` | Restart the graphics engine |
+| `/fo get <cvar>` | Print a CVar's current value and client default |
+| `/fo set <cvar> <value>` | Safely set any CVar (with crash caps & combat queue) |
+| `/fo scan [keyword]` | Search live client graphics CVars in chat |
+| `/fo snap` / `/fo diff` | Take a CVar snapshot and diff changes |
+| `/fo help` | Show all commands in chat |

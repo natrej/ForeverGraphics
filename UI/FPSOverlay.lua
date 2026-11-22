@@ -15,7 +15,7 @@ local deltaPending = nil
 function FPSOverlay:Create()
     if frame then return frame end
 
-    local f = CreateFrame("Frame", "ForeverGraphicsFPSOverlay", UIParent, "BackdropTemplate")
+    local f = CreateFrame("Frame", "ForeverOpticsFPSOverlay", UIParent, "BackdropTemplate")
     f:SetSize(215, 76)
     f:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -220, -24)
     f:SetFrameStrata("HIGH")
@@ -35,7 +35,7 @@ function FPSOverlay:Create()
 
     local header = f:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     header:SetPoint("TOPLEFT", 8, -6)
-    header:SetText("Forever Graphics FPS")
+    header:SetText("ForeverOptics FPS")
     header:SetTextColor(1.0, 0.82, 0.28)
 
     local closeBtn = CreateFrame("Button", nil, f)

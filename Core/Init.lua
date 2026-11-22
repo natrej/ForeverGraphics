@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
-local eventFrame = CreateFrame("Frame", "ForeverGraphicsEventFrame")
+local eventFrame = CreateFrame("Frame", "ForeverOpticsEventFrame")
 
 local function SafeRegisterEvent(f, event)
     pcall(f.RegisterEvent, f, event)
@@ -20,7 +20,7 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1, arg2)
         ns.FPSOverlay:Create()
         ns.MinimapBtn:Create()
         ns.MinimapBtn:RegisterOptionsPanel()
-        ns.Print("Loaded v" .. ns.ADDON_VERSION .. " by " .. ns.ADDON_AUTHOR .. ". Type |cffffd54f/fg|r or click the minimap spyglass to open.")
+        ns.Print("Loaded v" .. ns.ADDON_VERSION .. " by " .. ns.ADDON_AUTHOR .. ". Type |cffffd54f/fo|r or click the minimap spyglass to open.")
 
     elseif event == "PLAYER_ENTERING_WORLD" then
         local db = ns.Engine:GetDB()
@@ -47,38 +47,38 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1, arg2)
 end)
 
 -------------------------------------------------------------------------------
--- SLASH COMMANDS: /fg and /forevergraphics
+-- SLASH COMMANDS: /fo and /foreveroptics
 -------------------------------------------------------------------------------
 local function PrintHelp()
     ns.Print("Commands:")
-    ns.Print("  |cffffd54f/fg|r — Toggle main hidden graphics panel")
-    ns.Print("  |cffffd54f/fg explorer|r — Open Live Client CVar Explorer (all engine CVars)")
-    ns.Print("  |cffffd54f/fg hdr|r — Open HDR10 & Display Calibration tab")
-    ns.Print("  |cffffd54f/fg preset <name>|r — Apply preset (performance, balanced, blizzard_max, beyond_ultra, classic_look, handheld)")
-    ns.Print("  |cffffd54f/fg save <1|2>|r — Save current graphics settings to Custom Slot 1 or 2")
-    ns.Print("  |cffffd54f/fg load <1|2>|r — Load saved settings from Custom Slot 1 or 2")
-    ns.Print("  |cffffd54f/fg clear <1|2>|r — Clear Custom Slot 1 or 2")
-    ns.Print("  |cffffd54f/fg undo|r — Undo last applied preset or slot")
-    ns.Print("  |cffffd54f/fg apply|r — Re-apply all saved CVar overrides now")
-    ns.Print("  |cffffd54f/fg backup|r — Restore original pre-addon CVar values")
-    ns.Print("  |cffffd54f/fg reset|r — Reset all managed CVars to Blizzard defaults")
-    ns.Print("  |cffffd54f/fg fps|r — Toggle live FPS & frame-time overlay")
-    ns.Print("  |cffffd54f/fg minimap|r — Show/hide minimap icon")
-    ns.Print("  |cffffd54f/fg restart|r — Restart graphics engine")
-    ns.Print("  |cffffd54f/fg get <cvar>|r — Print current and default value of a CVar")
-    ns.Print("  |cffffd54f/fg set <cvar> <val>|r — Safely set any CVar (with crash caps & combat queue)")
-    ns.Print("  |cffffd54f/fg scan [word]|r — List matching client graphics CVars")
-    ns.Print("  |cffffd54f/fg snap|r / |cffffd54f/fg diff|r — Snapshot & diff all client CVars")
+    ns.Print("  |cffffd54f/fo|r — Toggle main hidden graphics panel")
+    ns.Print("  |cffffd54f/fo explorer|r — Open Live Client CVar Explorer (all engine CVars)")
+    ns.Print("  |cffffd54f/fo hdr|r — Open HDR10 & Display Calibration tab")
+    ns.Print("  |cffffd54f/fo preset <name>|r — Apply preset (performance, balanced, blizzard_max, beyond_ultra, classic_look, handheld)")
+    ns.Print("  |cffffd54f/fo save <1|2>|r — Save current graphics settings to Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fo load <1|2>|r — Load saved settings from Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fo clear <1|2>|r — Clear Custom Slot 1 or 2")
+    ns.Print("  |cffffd54f/fo undo|r — Undo last applied preset or slot")
+    ns.Print("  |cffffd54f/fo apply|r — Re-apply all saved CVar overrides now")
+    ns.Print("  |cffffd54f/fo backup|r — Restore original pre-addon CVar values")
+    ns.Print("  |cffffd54f/fo reset|r — Reset all managed CVars to Blizzard defaults")
+    ns.Print("  |cffffd54f/fo fps|r — Toggle live FPS & frame-time overlay")
+    ns.Print("  |cffffd54f/fo minimap|r — Show/hide minimap icon")
+    ns.Print("  |cffffd54f/fo restart|r — Restart graphics engine")
+    ns.Print("  |cffffd54f/fo get <cvar>|r — Print current and default value of a CVar")
+    ns.Print("  |cffffd54f/fo set <cvar> <val>|r — Safely set any CVar (with crash caps & combat queue)")
+    ns.Print("  |cffffd54f/fo scan [word]|r — List matching client graphics CVars")
+    ns.Print("  |cffffd54f/fo snap|r / |cffffd54f/fo diff|r — Snapshot & diff all client CVars")
 end
 
 local function Trim(s)
     return (s or ""):gsub("^%s+", ""):gsub("%s+$", "")
 end
 
-SLASH_FOREVERGRAPHICS1 = "/fg"
-SLASH_FOREVERGRAPHICS2 = "/forevergraphics"
+SLASH_FOREVEROPTICS1 = "/fo"
+SLASH_FOREVEROPTICS2 = "/foreveroptics"
 
-SlashCmdList["FOREVERGRAPHICS"] = function(msg)
+SlashCmdList["FOREVEROPTICS"] = function(msg)
     local cleaned = Trim(msg)
     if cleaned == "" then
         ns.MainFrame:Toggle()
@@ -116,33 +116,33 @@ SlashCmdList["FOREVERGRAPHICS"] = function(msg)
     elseif cmd == "save" then
         local idx = tonumber(rest)
         if idx ~= 1 and idx ~= 2 then
-            ns.Print("Usage: /fg save <1|2>")
+            ns.Print("Usage: /fo save <1|2>")
         else
             ns.Engine:SaveCustomSlot(idx)
         end
     elseif cmd == "load" then
         local idx = tonumber(rest)
         if idx ~= 1 and idx ~= 2 then
-            ns.Print("Usage: /fg load <1|2>")
+            ns.Print("Usage: /fo load <1|2>")
         else
             ns.Engine:LoadCustomSlot(idx)
         end
     elseif cmd == "clear" then
         local idx = tonumber(rest)
         if idx ~= 1 and idx ~= 2 then
-            ns.Print("Usage: /fg clear <1|2>")
+            ns.Print("Usage: /fo clear <1|2>")
         else
             ns.Engine:ClearCustomSlot(idx)
         end
     elseif cmd == "preset" then
         if rest == "" then
-            ns.Print("Usage: /fg preset <performance|balanced|blizzard_max|beyond_ultra|classic_look|handheld>")
+            ns.Print("Usage: /fo preset <performance|balanced|blizzard_max|beyond_ultra|classic_look|handheld>")
         else
             ns.Engine:ApplyPreset(string.lower(rest))
         end
     elseif cmd == "get" then
         if rest == "" then
-            ns.Print("Usage: /fg get <cvar>")
+            ns.Print("Usage: /fo get <cvar>")
         elseif not ns.Engine:Exists(rest) then
             ns.Print("|cffff5252Not found:|r CVar '" .. rest .. "' does not exist on this client.")
         else
@@ -154,7 +154,7 @@ SlashCmdList["FOREVERGRAPHICS"] = function(msg)
     elseif cmd == "set" then
         local cvar, val = rest:match("^(%S+)%s+(.+)$")
         if not cvar or not val then
-            ns.Print("Usage: /fg set <cvar> <value>")
+            ns.Print("Usage: /fo set <cvar> <value>")
         else
             local ok, actual = ns.Engine:Set(cvar, val)
             if ok and actual ~= "queued" then
@@ -172,12 +172,12 @@ SlashCmdList["FOREVERGRAPHICS"] = function(msg)
                 end
             end
         end
-        ns.Print(string.format("Found %d matching CVar(s)%s:", #matches, #matches > 25 and " (showing first 25; use /fg explorer for full list)" or ""))
+        ns.Print(string.format("Found %d matching CVar(s)%s:", #matches, #matches > 25 and " (showing first 25; use /fo explorer for full list)" or ""))
         for i = 1, math.min(25, #matches) do
             local e = matches[i]
             ns.Print(string.format("  |cff4fc3f7%s|r = %s (def: %s)", e.command, tostring(ns.Engine:Get(e.command)), tostring(ns.Engine:GetDefault(e.command))))
         end
     else
-        ns.Print("Unknown subcommand '" .. cmd .. "'. Type |cffffd54f/fg help|r for all commands.")
+        ns.Print("Unknown subcommand '" .. cmd .. "'. Type |cffffd54f/fo help|r for all commands.")
     end
 end
