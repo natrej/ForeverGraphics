@@ -1533,7 +1533,7 @@ ns.PRESETS = {
     {
         id = "performance",
         label = "Performance",
-        desc = "Absolute minimum graphics settings across the board for maximum possible FPS.",
+        desc = "Absolute minimum graphics settings across the board for maximum possible FPS (retains your current resolution).",
         values = {
             graphicsViewDistance = "0",
             farclip = "100",
@@ -1594,8 +1594,6 @@ ns.PRESETS = {
             Outline = "0",
             ResampleAlwaysSharpen = "0",
             resampleQuality = "0",
-            renderScale = "0.33",
-            DynamicRenderScale = "0",
             ffxAntiAliasingMode = "0",
             MSAAQuality = "0",
             textureFilteringMode = "0",
