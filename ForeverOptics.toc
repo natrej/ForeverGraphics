@@ -2,7 +2,7 @@
 ## Title: ForeverOptics by jertan
 ## Notes: Exposes and provides full controls for all hidden graphics CVars in World of Warcraft: Forever, including HDR10 calibration, presets, protection, FPS overlay, and a live client CVar explorer.
 ## Author: jertan
-## Version: 1.2.0
+## Version: 1.2.1
 ## SavedVariables: ForeverOpticsDB
 ## IconTexture: Interface\Icons\INV_Misc_Spyglass_03
 ## AddonCompartmentFunc: ForeverOptics_OnAddonCompartmentClick
