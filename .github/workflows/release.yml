@@ -69,7 +69,7 @@ jobs:
           # Stamp release version into packaged TOC so in-game version matches release tag
           sed -i -E "s/^## Version:.*/## Version: ${VER}/" "${ADDON_DIR}/ForeverOptics.toc"
 
-          ZIP_NAME="ForeverOptics-${TAG}-forever.zip"
+          ZIP_NAME="ForeverOptics-${TAG}.zip"
           (cd "${STAGE_DIR}" && zip -r "${GITHUB_WORKSPACE}/${ZIP_NAME}" ForeverOptics)
 
           echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
