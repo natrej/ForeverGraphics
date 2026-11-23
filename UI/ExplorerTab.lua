@@ -127,7 +127,15 @@ function Explorer:Build(parent)
                 local isMod = ns.Engine:IsModified(cvar)
                 local isRO = ns.Engine:IsReadOnly(cvar)
 
-                row.nameTxt:SetText(cvar)
+                local clampInfo = ns.Engine:GetClampInfo(cvar)
+                local badge = ""
+                if isRO then
+                    badge = "  |cffef5350[Locked]|r"
+                elseif clampInfo then
+                    badge = "  |cffff9800[Clamped]|r"
+                end
+
+                row.nameTxt:SetText(cvar .. badge)
                 if isMod then
                     row.nameTxt:SetTextColor(1.0, 0.84, 0.30)
                     row.modBar:Show()

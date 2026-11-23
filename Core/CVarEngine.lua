@@ -4,10 +4,16 @@ local Engine = {}
 ns.Engine = Engine
 
 Engine.pendingQueue = {}
+Engine.clampedCVars = {}
 Engine.listeners = {}
 Engine.snapshot = nil
 Engine.isApplyingInternal = false
 Engine.cachedClientCVars = nil
+
+function Engine:GetClampInfo(cvar)
+    if not cvar then return nil end
+    return self.clampedCVars[string.lower(cvar)]
+end
 
 -- Graphics-related CVar name patterns for supplementing Enum.ConsoleCategory.Graphics
 local GRAPHICS_KEYWORDS = {
@@ -283,20 +289,28 @@ function Engine:Set(cvar, value, opts)
     end
 
     -- Detect client clamping / refusal
+    local lowerCvar = string.lower(cvar)
     if ok and actualVal ~= nil and not self:ValuesEqual(actualVal, safeVal) then
+        self.clampedCVars[lowerCvar] = {
+            requested = tostring(safeVal),
+            applied = tostring(actualVal),
+        }
         if not silent then
             ChatPrint(string.format(
                 "|cffffd54fClient clamped:|r %s requested %s -> applied %s",
                 cvar, tostring(safeVal), tostring(actualVal)
             ))
         end
-    elseif not ok and not silent then
-        ChatPrint("|cffff5252Failed:|r Could not set CVar '" .. cvar .. "'.")
+    else
+        self.clampedCVars[lowerCvar] = nil
+        if not ok and not silent then
+            ChatPrint("|cffff5252Failed:|r Could not set CVar '" .. cvar .. "'.")
+        end
     end
 
     -- Handle mutual exclusion & HDR safety pairing
     if not skipCompanion then
-        local def = ns.CVAR_BY_NAME[string.lower(cvar)]
+        local def = ns.CVAR_BY_NAME[lowerCvar]
         if def and def.exclusiveWith and self:ValuesEqual(actualVal, "1") then
             if self:Exists(def.exclusiveWith) and not self:ValuesEqual(self:Get(def.exclusiveWith), "0") then
                 self:Set(def.exclusiveWith, "0", { silent = true, trackOverride = trackOverride, skipCompanion = true })
@@ -304,7 +318,7 @@ function Engine:Set(cvar, value, opts)
         end
 
         -- Prevent pitch-black HDR screen if HDROutput=1 and neither brightness mode is active
-        if string.lower(cvar) == "hdroutput" and self:ValuesEqual(actualVal, "1") then
+        if lowerCvar == "hdroutput" and self:ValuesEqual(actualVal, "1") then
             local peakOn = self:Exists("useHDRPeakBrightness") and self:ValuesEqual(self:Get("useHDRPeakBrightness"), "1")
             local refOn = self:Exists("useHDRBrightness") and self:ValuesEqual(self:Get("useHDRBrightness"), "1")
             if not peakOn and not refOn and self:Exists("useHDRPeakBrightness") then
@@ -327,6 +341,7 @@ function Engine:ResetCVar(cvar, silent)
 
     local db = self:GetDB()
     db.overrides[cvar] = nil
+    self.clampedCVars[string.lower(cvar)] = nil
 
     local ok, res = self:Set(cvar, defVal, { silent = silent, trackOverride = false })
     self:NotifyListeners(cvar, self:Get(cvar), "reset")

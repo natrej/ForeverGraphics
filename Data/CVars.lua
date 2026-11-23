@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.ADDON_TITLE = "ForeverOptics"
 ns.ADDON_AUTHOR = "jertan"
-ns.ADDON_VERSION = "1.2.1"
+ns.ADDON_VERSION = "1.2.2"
 
 -- Category definitions (ordered for tabs; tab 9 is the dynamic Live CVar Explorer)
 ns.CATEGORIES = {
@@ -72,6 +72,8 @@ ns.CVARS = {
         step = 100,
         recommended = 7000,
         impact = "High",
+        limitBadge = "Client Clamped",
+        warning = "The WoW: Forever client may clamp extreme low or high draw distances to its internal engine min/max bounds.",
         desc = "Maximum distance at which terrain and major world geometry render. Menu presets typically cap below 7000; values up to 10000 reveal distant landmarks across zones.",
     },
     {
@@ -384,6 +386,7 @@ ns.CVARS = {
         recommended = "3",
         impact = "Very High",
         warning = "Level 3+ can cause GPU hangs on some Linux/Proton NVIDIA setups or Apple Silicon Macs. Use 2 if you experience freezes on world load.",
+        limitBadge = "Warn: >=3 GPU Hang",
         desc = "Controls WoW: Forever's real-time global illumination and bounce lighting. Setting 0 disables indirect bounce light for a darker, classic look.",
     },
     {
@@ -426,6 +429,7 @@ ns.CVARS = {
         recommended = "1",
         impact = "High",
         warning = "Some Forever builds lock or re-enable volumeFog automatically; if locked, adjust Volume Fog Quality or Horizon Fog Start instead.",
+        limitBadge = "Client Locked",
         desc = "Toggles WoW: Forever's volumetric atmospheric fog shader (also affects god rays).",
     },
     {
@@ -541,6 +545,8 @@ ns.CVARS = {
         },
         recommended = "0",
         impact = "Very High",
+        limitBadge = "DX12 RT GPU Only",
+        warning = "Clamps to 0 unless running DirectX 12 on a hardware ray-tracing capable GPU.",
         desc = "Hardware ray-traced shadows for sun and local lights. Requires a DX12 ray-tracing capable GPU.",
     },
     {
@@ -615,6 +621,7 @@ ns.CVARS = {
         recommended = "2",
         impact = "Medium",
         warning = "Intentionally capped at 2! Setting waterDetail to 3 is known to crash WoW: Forever in Dalaran and dense zones.",
+        limitBadge = "Safe Cap: <=2",
         desc = "Controls WoW: Forever's physically-based water shader quality.",
     },
     {
@@ -632,6 +639,7 @@ ns.CVARS = {
         recommended = "3",
         impact = "Medium",
         warning = "Intentionally capped at 3! Setting reflectionMode to 4 is known to crash in Ruins of Lordaeron.",
+        limitBadge = "Safe Cap: <=3",
         desc = "Controls what world elements reflect on water surfaces.",
     },
     {
@@ -962,6 +970,8 @@ ns.CVARS = {
         decimals = 2,
         recommended = 1.0,
         impact = "Very High",
+        limitBadge = "Client Cap: <=1.00",
+        warning = "WoW: Forever 1.60.1 hard-caps Render Scale at 1.00 (100%) on most builds via ClientSettings_HIGH_MEM_FEATURES_BY_API_MASK. Values above 1.00 will be clamped back to 1.00; use CAS Sharpening + CMAA 2 or GPU DLDSR/VSR instead.",
         desc = "Resolution multiplier (1.00 = 100% native, 1.33 = supersampled, 2.00 = 4x pixels). Keep at 1.00 with CAS sharpening for best clarity per FPS.",
     },
     {
@@ -1020,6 +1030,8 @@ ns.CVARS = {
         },
         recommended = "2",
         impact = "High",
+        limitBadge = "Restricted in Forever",
+        warning = "WoW: Forever's lighting pipeline disables MSAA on most builds, clamping values back to 0. Use Post-Process AA (CMAA 2) instead.",
         desc = "Hardware multisample anti-aliasing for silky-smooth geometry edges.",
     },
     {
@@ -1155,6 +1167,7 @@ ns.CVARS = {
         impact = "Low",
         requiresGxRestart = true,
         warning = "Requires HDR enabled in Windows/macOS and an HDR display. Turn OFF Windows Auto HDR. Also enable ONE brightness mode below so the image does not go dark!",
+        limitBadge = "HDR Display Only",
         desc = "Activates Blizzard's hidden native HDR10 rendering pipeline.",
     },
     {
@@ -1256,6 +1269,8 @@ ns.CVARS = {
         decimals = 1,
         recommended = 2.6,
         impact = "None",
+        limitBadge = "Client Clamped",
+        warning = "Blizzard clamps maximum camera zoom factor depending on the Forever client build (commonly 2.6 or 4.0).",
         desc = "Extends maximum camera zoom distance beyond the standard Interface slider (up to 4.0 where permitted by client build).",
     },
     {
@@ -1359,6 +1374,8 @@ ns.CVARS = {
         },
         recommended = "1",
         impact = "Low",
+        limitBadge = "NVIDIA Reflex Only",
+        warning = "Clamps to 0 on non-NVIDIA GPUs or unsupported driver/API configurations.",
         desc = "Minimizes render queue latency on supported NVIDIA GPUs.",
     },
     {
@@ -1446,6 +1463,8 @@ ns.CVARS = {
         },
         recommended = "0",
         impact = "Medium",
+        limitBadge = "DX12 Tier 2 Only",
+        warning = "Clamps to 0 unless running DirectX 12 on a GPU that supports Variable Rate Shading Tier 2.",
         desc = "Reduces pixel shading rate in low-contrast areas on DX12 Tier 2 GPUs for higher FPS.",
     },
     {

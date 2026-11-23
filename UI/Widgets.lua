@@ -69,6 +69,19 @@ function Widgets.ShowCVarTooltip(anchor, def, isSupported, isReadOnly)
         GameTooltip:AddDoubleLine("FPS Impact:", IMPACT_COLORS[def.impact] or def.impact, 0.7, 0.74, 0.8, 1, 1, 1)
     end
 
+    if def.limitBadge then
+        GameTooltip:AddDoubleLine("Restriction / Limit:", "|cffffb74d" .. def.limitBadge .. "|r", 0.7, 0.74, 0.8, 1, 1, 1)
+    end
+
+    local clampInfo = ns.Engine:GetClampInfo(def.cvar)
+    if clampInfo then
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddLine(string.format(
+            "Client Clamped: Requested %s -> client enforced %s.",
+            tostring(clampInfo.requested), tostring(clampInfo.applied)
+        ), 1.0, 0.60, 0.20, true)
+    end
+
     if def.desc and def.desc ~= "" then
         GameTooltip:AddLine(" ")
         GameTooltip:AddLine(def.desc, 0.9, 0.92, 0.95, true)
@@ -611,6 +624,19 @@ function Widgets.CreateCVarRow(parent, def)
         local defVal = exists and ns.Engine:GetDefault(def.cvar) or nil
         local isModified = exists and ns.Engine:IsModified(def.cvar)
         local isPending = ns.Engine.pendingQueue[def.cvar] ~= nil
+        local clampInfo = ns.Engine:GetClampInfo(def.cvar)
+
+        -- Inline restriction / clamp warning badge next to title
+        local titleBadge = ""
+        if exists and readOnly then
+            titleBadge = "  |cffef5350[Locked]|r"
+        elseif clampInfo then
+            local appliedFmt = ns.Engine:FormatValue(clampInfo.applied, def.decimals)
+            titleBadge = "  |cffff9800[Clamped -> " .. appliedFmt .. "]|r"
+        elseif def.limitBadge then
+            titleBadge = "  |cffffb74d[" .. def.limitBadge .. "]|r"
+        end
+        title:SetText(def.label .. titleBadge)
 
         -- Update metadata line
         local impactTxt = def.impact and (" | " .. (IMPACT_COLORS[def.impact] or def.impact)) or ""
